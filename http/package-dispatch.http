@@ -1,0 +1,46 @@
+@baseUrl = http://localhost:8081
+@adminEmail = admin@example.com
+@adminPassword = password
+
+###
+# Login
+POST {{baseUrl}}/api/login_check
+Content-Type: application/json
+
+{
+  "email": "{{adminEmail}}",
+  "password": "{{adminPassword}}"
+}
+
+> {% client.global.set("token", response.body.token); %}
+
+###
+# Me
+GET {{baseUrl}}/api/auth/me
+Authorization: Bearer {{token}}
+
+###
+# Create courier
+POST {{baseUrl}}/api/couriers
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "fullName": "Juan Perez",
+  "phone": "+51999999999",
+  "active": true
+}
+
+###
+# Create package
+POST {{baseUrl}}/api/packages
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "trackingCode": "TRK-0001",
+  "recipientName": "John Doe",
+  "recipientAddress": "123 Main St",
+  "weightKg": 1.25,
+  "description": "Box with books"
+}

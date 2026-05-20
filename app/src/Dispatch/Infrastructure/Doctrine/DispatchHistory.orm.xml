@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="App\Dispatch\Domain\Entity\DispatchHistory" table="dispatch_history">
+        <id name="id" type="string" column="id" length="36">
+            <generator strategy="NONE"/>
+        </id>
+        <many-to-one field="dispatch" target-entity="App\Dispatch\Domain\Entity\Dispatch" fetch="LAZY">
+            <join-column name="dispatch_id" referenced-column-name="id" nullable="false" on-delete="CASCADE" column-definition="varchar(36)"/>
+        </many-to-one>
+        <field name="previousStatus" type="string" length="20" column="previous_status" nullable="true"/>
+        <field name="newStatus" type="string" length="20" column="new_status"/>
+        <field name="changedAt" type="datetime_immutable" column="changed_at"/>
+        <indexes>
+            <index name="idx_dispatch_history_dispatch_changed_at" columns="dispatch_id,changed_at"/>
+        </indexes>
+    </entity>
+</doctrine-mapping>
