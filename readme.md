@@ -38,6 +38,13 @@ Inclui un archivo `.http` para probar login y el uso del token sin depender de S
 
 - [API HTTP](/c:/Data/Source/Repos/technical-test-symfony/http/package-dispatch.http)
 
+### Flujo recomendado
+
+1. Ejecuta el login.
+2. Copia `response.body.data.token`.
+3. Pega ese token en `@token`.
+4. Ejecuta las peticiones en orden: `me`, `couriers`, `packages`, `dispatches`, `assign`, `status`.
+
 ## Como levantar el proyecto
 
 1. Levantar los contenedores:
@@ -58,10 +65,16 @@ docker compose exec app composer install
 docker compose exec app php bin/console doctrine:migrations:migrate
 ```
 
-4. Crear un usuario de prueba:
+4. Crear o corregir el usuario de prueba:
 
 ```bash
 docker compose exec app php bin/console app:create-user admin@example.com password --admin
+```
+
+Si el usuario ya existe y solo quieres actualizar la contraseña:
+
+```bash
+docker compose exec app php bin/console app:reset-user-password admin@example.com password
 ```
 
 5. Probar la API con el archivo `.http` incluido.
@@ -77,9 +90,11 @@ docker compose exec app php bin/console app:create-user admin@example.com passwo
 - Autenticacion JWT con LexikJWTAuthenticationBundle
 - Login: `POST /api/login_check`
 - Rutas protegidas con firewall `api`
+- Usuario de prueba recomendado: `admin@example.com` / `password`
 
 ## Notas
 
 - La aplicacion corre dentro de Docker.
 - El proyecto esta montado en `app/`.
 - Los identificadores principales usan UUID.
+- Si el login devuelve `Invalid credentials`, recrea el usuario con `app:create-user` o ajusta la clave con `app:reset-user-password`.

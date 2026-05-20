@@ -3,27 +3,29 @@
 @adminPassword = password
 
 ###
-# Login
+# Paso 1: Login
 POST {{baseUrl}}/api/login_check
-Content-Type: application/json
+Content-Type: application/x-www-form-urlencoded
+Accept: application/json
 
-{
-  "email": "{{adminEmail}}",
-  "password": "{{adminPassword}}"
-}
-
-> {% client.global.set("token", response.body.token); %}
+email={{adminEmail}}&password={{adminPassword}}
 
 ###
-# Me
+# Paso 2: pega aqui el token de response.body.data.token una sola vez
+@token = PEGAR_TOKEN_AQUI
+
+###
+# Paso 3: validar autenticacion
 GET {{baseUrl}}/api/auth/me
 Authorization: Bearer {{token}}
+Accept: application/json
 
 ###
-# Create courier
+# Paso 4: crear courier
 POST {{baseUrl}}/api/couriers
 Authorization: Bearer {{token}}
 Content-Type: application/json
+Accept: application/json
 
 {
   "fullName": "Juan Perez",
@@ -32,10 +34,11 @@ Content-Type: application/json
 }
 
 ###
-# Create package
+# Paso 5: crear package
 POST {{baseUrl}}/api/packages
 Authorization: Bearer {{token}}
 Content-Type: application/json
+Accept: application/json
 
 {
   "trackingCode": "TRK-0001",
@@ -44,3 +47,69 @@ Content-Type: application/json
   "weightKg": 1.25,
   "description": "Box with books"
 }
+
+###
+# Paso 6: crear dispatch
+POST {{baseUrl}}/api/dispatches
+Authorization: Bearer {{token}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "packageId": "PEGAR_PACKAGE_UUID",
+  "referenceNumber": "DSP-0001",
+  "originAddress": "Warehouse 1",
+  "destinationAddress": "Customer Address",
+  "notes": "Leave at reception"
+}
+
+###
+# Paso 7: asignar courier al dispatch
+PATCH {{baseUrl}}/api/dispatches/PEGAR_DISPATCH_UUID/assign
+Authorization: Bearer {{token}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "courierId": "PEGAR_COURIER_UUID"
+}
+
+###
+# Paso 8: cambiar estado a in_transit
+PATCH {{baseUrl}}/api/dispatches/PEGAR_DISPATCH_UUID/status
+Authorization: Bearer {{token}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "status": "in_transit"
+}
+
+###
+# Paso 9: cambiar estado a delivered
+PATCH {{baseUrl}}/api/dispatches/PEGAR_DISPATCH_UUID/status
+Authorization: Bearer {{token}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "status": "delivered"
+}
+
+###
+# Paso 10: listar couriers
+GET {{baseUrl}}/api/couriers?page=1&perPage=15
+Authorization: Bearer {{token}}
+Accept: application/json
+
+###
+# Paso 11: listar packages
+GET {{baseUrl}}/api/packages?page=1&perPage=15
+Authorization: Bearer {{token}}
+Accept: application/json
+
+###
+# Paso 12: listar dispatches
+GET {{baseUrl}}/api/dispatches?page=1&perPage=15
+Authorization: Bearer {{token}}
+Accept: application/json
