@@ -91,6 +91,7 @@ docker compose exec app php bin/console app:reset-user-password admin@example.co
 - Login: `POST /api/login_check`
 - Rutas protegidas con firewall `api`
 - Usuario de prueba recomendado: `admin@example.com` / `password`
+- Las claves sensibles y secretos locales deben vivir en `app/.env.local`, no en archivos versionados.
 
 ## Notas
 
