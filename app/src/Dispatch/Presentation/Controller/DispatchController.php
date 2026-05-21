@@ -9,6 +9,7 @@ use App\Dispatch\Application\DTO\DispatchData;
 use App\Dispatch\Application\DTO\DispatchStatusData;
 use App\Dispatch\Application\UseCase\AssignCourierToDispatchUseCase;
 use App\Dispatch\Application\UseCase\CreateDispatchUseCase;
+use App\Dispatch\Application\UseCase\GetDispatchHistoryUseCase;
 use App\Dispatch\Application\UseCase\GetDispatchDetailsUseCase;
 use App\Dispatch\Application\UseCase\ListDispatchesUseCase;
 use App\Dispatch\Application\UseCase\UpdateDispatchStatusUseCase;
@@ -16,6 +17,7 @@ use App\Dispatch\Domain\Enum\DispatchStatus;
 use App\Dispatch\Presentation\Request\AssignCourierRequest;
 use App\Dispatch\Presentation\Request\CreateDispatchRequest;
 use App\Dispatch\Presentation\Request\UpdateDispatchStatusRequest;
+use App\Dispatch\Presentation\Response\DispatchHistoryResponse;
 use App\Dispatch\Presentation\Response\DispatchResponse;
 use App\Shared\Application\DTO\PaginationQuery;
 use App\Shared\Application\Service\ApiResponseFactory;
@@ -34,6 +36,7 @@ final class DispatchController
         private readonly AssignCourierToDispatchUseCase $assignCourierUseCase,
         private readonly UpdateDispatchStatusUseCase $updateDispatchStatusUseCase,
         private readonly GetDispatchDetailsUseCase $getDispatchDetailsUseCase,
+        private readonly GetDispatchHistoryUseCase $getDispatchHistoryUseCase,
         private readonly ListDispatchesUseCase $listDispatchesUseCase,
     ) {
     }
@@ -110,6 +113,17 @@ final class DispatchController
         return $this->responseFactory->success(
             DispatchResponse::fromEntity($details->dispatch, $details->history)
         );
+    }
+
+    #[Route('/{id}/history', name: 'dispatch_history', methods: ['GET'])]
+    public function history(string $id): Response
+    {
+        $history = $this->getDispatchHistoryUseCase->execute($id);
+
+        return $this->responseFactory->success([
+            'dispatchId' => $id,
+            'history' => DispatchHistoryResponse::collection($history),
+        ]);
     }
 
     #[Route('', name: 'dispatch_list', methods: ['GET'])]

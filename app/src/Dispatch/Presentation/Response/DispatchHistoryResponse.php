@@ -17,4 +17,15 @@ final class DispatchHistoryResponse
             'changedAt' => $history->getChangedAt()->format(DATE_ATOM),
         ];
     }
+
+    /**
+     * @param DispatchHistory[] $history
+     */
+    public static function collection(array $history): array
+    {
+        return array_map(
+            static fn (DispatchHistory $item): array => self::fromEntity($item),
+            $history
+        );
+    }
 }

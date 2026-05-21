@@ -113,3 +113,9 @@ Accept: application/json
 GET {{baseUrl}}/api/dispatches?page=1&perPage=15
 Authorization: Bearer {{token}}
 Accept: application/json
+
+###
+# Paso 13: historial de dispatch
+GET {{baseUrl}}/api/dispatches/PEGAR_DISPATCH_UUID/history
+Authorization: Bearer {{token}}
+Accept: application/json

@@ -43,7 +43,7 @@ Inclui un archivo `.http` para probar login y el uso del token sin depender de S
 1. Ejecuta el login.
 2. Copia `response.body.data.token`.
 3. Pega ese token en `@token`.
-4. Ejecuta las peticiones en orden: `me`, `couriers`, `packages`, `dispatches`, `assign`, `status`.
+4. Ejecuta las peticiones en orden: `me`, `couriers`, `packages`, `dispatches`, `assign`, `status`, `history`.
 
 ## Como levantar el proyecto
 
