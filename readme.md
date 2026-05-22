@@ -45,6 +45,24 @@ Inclui un archivo `.http` para probar login y el uso del token sin depender de S
 3. Pega ese token en `@token`.
 4. Ejecuta las peticiones en orden: `me`, `couriers`, `packages`, `dispatches`, `assign`, `status`, `history`.
 
+## Prueba funcional
+
+Para el test funcional de `GET /api/dispatches/{id}/history`:
+
+1. Crear la base de datos de test si no existe:
+
+```bash
+docker compose exec app bash -lc "APP_ENV=test php bin/console doctrine:database:create --if-not-exists"
+```
+
+2. Ejecutar la suite funcional:
+
+```bash
+docker compose exec app bash -lc "php bin/phpunit --testsuite Functional"
+```
+
+El test funcional prepara un esquema mínimo en la base de datos de test, carga los datos necesarios y valida el JSON de respuesta del endpoint protegido con JWT.
+
 ## Como levantar el proyecto
 
 1. Levantar los contenedores:
