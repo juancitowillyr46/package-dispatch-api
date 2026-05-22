@@ -8,10 +8,15 @@
         <testsuite name="Unit">
             <directory>tests/Unit</directory>
         </testsuite>
+        <testsuite name="Functional">
+            <directory>tests/Functional</directory>
+        </testsuite>
     </testsuites>
     <php>
+        <env name="KERNEL_CLASS" value="App\Kernel"/>
         <env name="APP_ENV" value="test"/>
-        <env name="APP_DEBUG" value="1"/>
+        <env name="APP_DEBUG" value="0"/>
+        <env name="DEFAULT_URI" value="http://localhost"/>
 
         <!-- ###+ doctrine/doctrine-bundle ### -->
         <!-- Format described at https://www.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html#connecting-using-a-url -->
@@ -20,7 +25,7 @@
         <!-- DATABASE_URL="sqlite:///%kernel.project_dir%/var/data_%kernel.environment%.db" -->
         <!-- DATABASE_URL="mysql://app:!ChangeMe!@127.0.0.1:3306/app?serverVersion=8.0.32&charset=utf8mb4" -->
         <!-- DATABASE_URL="mysql://app:!ChangeMe!@127.0.0.1:3306/app?serverVersion=10.11.2-MariaDB&charset=utf8mb4" -->
-        <env name="DATABASE_URL" value="postgresql://app:!ChangeMe!@127.0.0.1:5432/app?serverVersion=16&amp;charset=utf8"/>
+        <env name="DATABASE_URL" value="postgresql://postgres:postgres@postgres:5432/package_dispatch?serverVersion=16&amp;charset=utf8"/>
         <!-- ###- doctrine/doctrine-bundle ### -->
 
         <!-- ###+ lexik/jwt-authentication-bundle ### -->
